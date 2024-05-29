@@ -17,7 +17,7 @@ cocktailRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, r
       name: name,
       receipt: receipt,
       image: req.file ? req.file.filename : null,
-      ingredients: ingredients
+      ingredients: JSON.parse(ingredients)
     };
 
     const cocktail = new Cocktail(cocktailData);
