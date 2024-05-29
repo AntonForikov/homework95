@@ -40,7 +40,7 @@ function App() {
             }/>
             <Route path='/myCocktails' element={
               <ProtectedRoute isAllowed={Boolean(user)}>
-                <h1>My coctails</h1>
+                <Home userCocktails/>
               </ProtectedRoute>
             }/>
             <Route path='/register' element={<Register />}/>

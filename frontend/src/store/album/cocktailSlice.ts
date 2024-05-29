@@ -1,7 +1,7 @@
 import {CocktailFromDb} from '../../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
-import {getCocktails} from './cocktailThunk';
+import {getCocktails, getUserCocktails} from './cocktailThunk';
 
 interface CocktailState {
   cocktailList: CocktailFromDb[];
@@ -26,17 +26,14 @@ const cocktailSlice = createSlice({
     }).addCase(getCocktails.rejected, (state) => {
       state.cocktailLoading = false;
     });
-  //   builder.addCase(getAlbumArtist.pending, (state) => {
-  //     state.albumLoading = true;
-  //   }).addCase(getAlbumArtist.fulfilled, (state, {payload: artist}) => {
-  //     state.albumLoading = false;
-  //     if (artist) state.artist = artist;
-  //   }).addCase(getAlbumArtist.rejected, (state) => {
-  //     state.albumLoading = false;
-  //   });
-  //   builder.addCase(getAlbumsForSelect.fulfilled, (state, {payload: albums}) => {
-  //     if (albums) state.albumsForSelect = albums;
-  //   });
+    builder.addCase(getUserCocktails.pending, (state) => {
+      state.cocktailLoading = true;
+    }).addCase(getUserCocktails.fulfilled, (state, {payload: cocktails}) => {
+      state.cocktailLoading = false;
+      if (cocktails) state.cocktailList = cocktails;
+    }).addCase(getUserCocktails.rejected, (state) => {
+      state.cocktailLoading = false;
+    });
   }
 });
 

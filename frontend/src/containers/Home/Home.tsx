@@ -1,18 +1,27 @@
 import {Alert, CircularProgress, Grid, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {useEffect} from 'react';
+import React, {useEffect} from 'react';
 import CardItem from '../../components/CardItem/CardItem';
 import {selectCocktailList, selectCocktailLoading} from '../../store/album/cocktailSlice';
-import {getCocktails} from '../../store/album/cocktailThunk';
+import {getCocktails, getUserCocktails} from '../../store/album/cocktailThunk';
+import {selectUser} from '../../store/user/userSlice';
 
-const Home = () => {
+interface Props{
+  userCocktails?: boolean
+}
+const Home: React.FC<Props> = ({userCocktails= false}) => {
   const cocktailList = useAppSelector(selectCocktailList);
   const loading = useAppSelector(selectCocktailLoading);
+  const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getCocktails());
-  }, [dispatch]);
+    if (userCocktails && user) {
+      dispatch(getUserCocktails(user?._id));
+    } else {
+      dispatch(getCocktails());
+    }
+  }, [dispatch, userCocktails, user]);
 
   return (
     <>
