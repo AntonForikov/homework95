@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import config from './config';
 import Artist from './models/Artist';
-import Album from './models/Album';
+import Cocktail from './models/Cocktail';
 import Track from './models/Track';
 import User from './models/User';
 
@@ -66,7 +66,7 @@ const resetDB = async () => {
     }
   );
 
-  const [album1, album2, album3, album4, album5] = await Album.create(
+  const [album1, album2, album3, album4, album5] = await Cocktail.create(
     {
       title: 'aenima',
       artist: artist1,

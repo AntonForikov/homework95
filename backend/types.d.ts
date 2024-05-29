@@ -1,49 +1,25 @@
 import {Model} from 'mongoose';
 import {ObjectId} from 'mongodb';
 
-export interface ArtistFromDB {
+export interface CocktailFromDB {
   _id: ObjectId;
+  user: ObjectId;
   name: string;
-  information: string | null;
-  image: string | null;
-}
-
-export type ArtistWithoutId = Omit<ArtistFromDB, '_id'>;
-
-export interface AlbumFromDB {
-  _id: ObjectId;
-  title: string;
-  artist: ObjectId;
-  year: number;
+  receipt: string;
   image?: string | null;
   isPublished: boolean;
-  user: ObjectId
+  ingredients: [{title: string, quantity: string}];
+  grades: [{user: ObjectId, grade: string}]
 }
 
-export interface AlbumWithTrackQuantity extends AlbumFromDB {
-  trackQuantity: number
-}
-
-export type AlbumWithoutId = Omit<AlbumFromDB, '_id'>;
-
-export interface TrackFromDb {
-  _id: ObjectId;
-  title: string;
-  album: ObjectId;
-  duration: string | null;
-  indexNumber: string;
-  artist: ObjectId;
-  user: ObjectId;
-}
-
-export type TrackWithoutId = Omit<TrackFromDb, '_id'>
+export type CocktailWithoutId = Omit<CocktailFromDB, '_id'>;
 
 export interface UserFields {
   email: string;
   password: string;
   token: string;
   role: string;
-  displayName?: string,
+  displayName: string,
   googleID?: string
   image?: string
 }
@@ -58,13 +34,3 @@ export interface UserMethods {
 }
 
 export type UserModel = Model<UserFields, {}, UserMethods>;
-
-export interface TrackHistoryFromDb {
-  _id: string;
-  user: ObjectId | undefined;
-  track: ObjectId;
-  artist: ObjectId;
-  date: Date;
-}
-
-export type TrackHistoryWithoutId = Omit<TrackHistoryFromDb, '_id'>;

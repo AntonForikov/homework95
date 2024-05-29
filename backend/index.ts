@@ -1,11 +1,8 @@
 import express from 'express';
-import artistRouter from './routes/artist';
 import mongoose from 'mongoose';
 import config from './config';
-import albumRouter from './routes/album';
-import trackRouter from './routes/track';
+import cocktailRouter from './routes/cocktail';
 import userRouter from './routes/user';
-import trackHistoryRoute from './routes/trackHistory';
 import cors from 'cors';
 
 const app = express();
@@ -14,11 +11,8 @@ const port = 8000;
 app.use(express.json());
 app.use(cors({origin: ['http://localhost:5173']}));
 app.use(express.static('public'));
-app.use('/artists', artistRouter);
-app.use('/albums', albumRouter);
-app.use('/tracks', trackRouter);
+app.use('/albums', cocktailRouter);
 app.use('/users', userRouter);
-app.use('/trackHistory', trackHistoryRoute);
 
 const run = async () => {
   await mongoose.connect(config.mongoose.db);
