@@ -3,21 +3,25 @@ import axiosApi from '../../axiosApi';
 import {CocktailFromDb, CocktailMutation} from '../../types';
 
 
-// export const addAlbum = createAsyncThunk(
-//   'addAlbum/post',
-//   async (album: CocktailMutation) => {
-//
-//     const formData = new FormData();
-//
-//     const keys = Object.keys(album) as (keyof CocktailMutation)[];
-//
-//     keys.forEach(key => {
-//       const value = album[key];
-//       if (value !== null) formData.append(key, value);
-//     });
-//     await axiosApi.post('/albums', formData);
-//   }
-// );
+export const addCocktail = createAsyncThunk(
+  'addCocktail/post',
+  async (cocktail: CocktailMutation) => {
+
+    const formData = new FormData();
+
+    const keys = Object.keys(cocktail) as (keyof CocktailMutation)[];
+
+    keys.forEach(key => {
+      const value = cocktail[key];
+      console.log(key);
+
+      // if (value !== null) formData.append(key, value);
+      if (key === 'ingredients') formData.append(key, JSON.stringify(value));
+      if (value !== null && key !== 'ingredients') formData.append(key, value);
+    });
+    await axiosApi.post('/cocktails', formData);
+  }
+);
 export const getCocktails = createAsyncThunk(
   'getCocktails/get',
   async () => {

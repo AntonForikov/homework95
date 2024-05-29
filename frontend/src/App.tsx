@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import {useAppSelector} from './app/hooks';
 import {selectUser} from './store/user/userSlice';
+import AddCocktail from './containers/AddCocktail/AddCocktail';
 // import AddTrack from './containers/Tracks/AddTrack';
 // import AddArtist from './containers/Artist/AddArtist';
 function App() {
@@ -22,19 +23,26 @@ function App() {
       <main>
         <Container maxWidth='xl'>
           <Routes>
-            {/*<Route path='/' element={<Home/>}/>*/}
             <Route path='/' element={
               <ProtectedRoute isAllowed={Boolean(user)}>
                 <Home />
               </ProtectedRoute>
             }/>
-            {/*<Route path='artist/:id' element={<Albums/>}/>*/}
-            {/*<Route path='album/:albumId' element={<Tracks/>}/>*/}
-            {/*<Route path='/newAlbum' element={*/}
-            {/*  <ProtectedRoute isAllowed={Boolean(user)}>*/}
-            {/*    <AddCocktail/>*/}
-            {/*  </ProtectedRoute>*/}
-            {/*}/>*/}
+            <Route path='/:id' element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <h1>here</h1>
+              </ProtectedRoute>
+            }/>
+            <Route path='/newCocktail' element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <AddCocktail />
+              </ProtectedRoute>
+            }/>
+            <Route path='/myCocktails' element={
+              <ProtectedRoute isAllowed={Boolean(user)}>
+                <h1>My coctails</h1>
+              </ProtectedRoute>
+            }/>
             <Route path='/register' element={<Register />}/>
             <Route path='/login' element={<Login />}/>
             <Route path="*" element={<h1>Not found</h1>}/>

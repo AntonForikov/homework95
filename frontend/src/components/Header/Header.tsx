@@ -12,7 +12,7 @@ const Header = () => {
       <Toolbar>
         <Grid container justifyContent='space-between' alignItems='center'>
           <Typography variant='h5' padding={2} component={Link} to='/' sx={{color: 'inherit', textDecoration: 'none'}}>
-            Spotify
+            Cocktails
           </Typography>
           <Grid>
             {user

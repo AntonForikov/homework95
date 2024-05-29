@@ -1,9 +1,14 @@
-export interface CocktailMutation {
+export interface CocktailWithoutIng {
   name: string,
   image: File | null,
   receipt: string,
-  ingredients: [{title: string, quantity: string}]
 }
+
+export interface CocktailMutation extends CocktailWithoutIng {
+  ingredients: Ingredient[]
+}
+
+export interface Ingredient {title: string, quantity: string}
 
 export interface CocktailFromDb {
   _id: ObjectId;
@@ -12,7 +17,7 @@ export interface CocktailFromDb {
   receipt: string;
   image?: string | null | undefined;
   isPublished: boolean;
-  ingredients: [{title: string, quantity: string}];
+  ingredients: Ingredient[];
   grades: [{user: ObjectId, grade: string}]
 }
 

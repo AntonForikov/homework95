@@ -58,6 +58,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         onClose={handleClose}
       >
         <MenuItem component={Link} to='/newCocktail' onClick={handleClose}>Add Cocktail</MenuItem>
+        <MenuItem component={Link} to='/myCocktails' onClick={handleClose}>My Cocktails</MenuItem>
         <MenuItem onClick={logoutUser}>Log Out</MenuItem>
       </Menu>
     </>

@@ -13,6 +13,7 @@ import {selectUser} from '../../store/user/userSlice';
 import Button from '@mui/material/Button';
 import {deleteCocktail, getCocktails, publishCocktail} from '../../store/album/cocktailThunk';
 import Box from '@mui/material/Box';
+import {useNavigate} from 'react-router-dom';
 
 interface Props {
   id: string,
@@ -34,11 +35,12 @@ const CardItem: React.FC<Props> = ({
 }) => {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   let cardImage = no_image_available;
 
   if (image) cardImage = `${apiUrl}/${image}`;
   const onCardClick = () => {
-
+    navigate(`/${id}`);
   };
 
   const onPublish = async (e: React.MouseEvent) => {
