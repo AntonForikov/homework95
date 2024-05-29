@@ -13,7 +13,6 @@ export const addCocktail = createAsyncThunk(
 
     keys.forEach(key => {
       const value = cocktail[key];
-
       if (key === 'ingredients') formData.append(key, JSON.stringify(value));
       if (value !== null && key !== 'ingredients') formData.append(key, value);
     });

@@ -143,6 +143,7 @@ const AddAlbum = () => {
               <TextField
                 sx={{width: '20%'}}
                 type="number"
+                inputProps={{min: 1}}
                 variant="outlined"
                 label="Quantity"
                 name="quantity"
