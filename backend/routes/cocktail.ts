@@ -2,9 +2,9 @@ import express from 'express';
 import {deleteImage, imagesUpload} from '../multer';
 import Cocktail from '../models/Cocktail';
 import mongoose from 'mongoose';
-import {ObjectId} from 'mongodb';
 import auth, {Auth} from '../middleware/auth';
 import permit from '../middleware/permit';
+import {ObjectId} from 'mongodb';
 
 const cocktailRouter = express.Router();
 
@@ -31,112 +31,79 @@ cocktailRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, r
   }
 });
 
-// cocktailRouter.get('/', async (req, res, next) => {
-//   const {artist} = req.query;
-//
-//   if(typeof artist === 'string') {
-//     try {
-//       let _id: ObjectId;
-//       try {
-//         _id = new ObjectId(artist);
-//       } catch {
-//         return res.status(404).send({error: 'Artist query is not ObjectId.'});
-//       }
-//
-//       const albums = await Cocktail.find({artist: _id}).sort({year: -1});
-//       if (albums.length === 0) return res.status(404).send({error: 'There is no album with such artist ID.'});
-//
-//       const result: AlbumWithTrackQuantity[] = [];
-//
-//       for (const album of albums) {
-//         const albumTracks = await Track.find({album: album._id});
-//         result.push({
-//           _id: album._id,
-//           title: album.title,
-//           artist: album.artist,
-//           year: album.year,
-//           image: album.image,
-//           isPublished: album.isPublished,
-//           trackQuantity: albumTracks.length,
-//           user: album.user
-//         });
-//       }
-//
-//       return res.send(result);
-//     } catch (e) {
-//       next(e);
-//     }
-//   }
-//
-//   try {
-//     const albums = await Cocktail.find().sort({year: -1});
-//     return res.send(albums);
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-//
-// cocktailRouter.get('/:_id', async (req, res, next) => {
-//   try {
-//     const {_id} = req.params;
-//     const targetAlbum = await Cocktail.find({_id}).populate('artistId', 'name information image');
-//     return res.send(targetAlbum);
-//   } catch (e) {
-//     if (e instanceof mongoose.Error.CastError) return res.status(404).send({error: 'No such album'});
-//     next(e);
-//   }
-// });
-//
-// cocktailRouter.patch('/:id/togglePublished', auth, permit(['admin']), async (req, res,next) => {
-//   try {
-//     const {id} = req.params;
-//     let _id: ObjectId;
-//     try {
-//       _id = new ObjectId(id);
-//     } catch {
-//       return res.status(404).send({error: 'Cocktail id is not an ObjectId.'});
-//     }
-//
-//     const targetAlbum = await Cocktail.findById(_id);
-//
-//     if (!targetAlbum) return res.status(400).send({error: 'There is no such album.'});
-//
-//     targetAlbum.isPublished = !targetAlbum.isPublished;
-//     await targetAlbum.save();
-//     return res.send(targetAlbum)
-//   } catch (e) {
-//     next(e);
-//   }
-// });
-//
-// cocktailRouter.delete('/:id', auth, async (req: Auth, res, next) => {
-//   try {
-//     const {id} = req.params;
-//     let _id: ObjectId;
-//     try {
-//       _id = new ObjectId(id);
-//     } catch {
-//       return res.status(404).send({error: 'Cocktail id is not an ObjectId.'});
-//     }
-//
-//     const targetAlbum = await Cocktail.findById(_id);
-//     if (!targetAlbum) return res.status(400).send({error: 'There is no album to delete'});
-//
-//     if (req.user?._id.toString() === targetAlbum.user.toString() && req.user?.role === 'user') {
-//       await Cocktail.deleteOne(_id);
-//       await Track.deleteMany({album: _id});
-//       return res.send({success: "Cocktail and it's tracks has been deleted."});
-//     }
-//
-//     if (req.user?.role !== 'admin') return res.status(403).send({error: 'Not authorized'});
-//
-//     await Cocktail.deleteOne(_id);
-//     await Track.deleteMany({album: _id});
-//
-//     return res.send({success: "Cocktail and it's tracks has been deleted."});
-//   } catch (e) {
-//     next(e);
-//   }
-// });
+cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
+  const {user} = req.query;
+
+  try {
+    if (req.user?.role === 'admin') {
+      const allAlbums = await Cocktail.find();
+      return res.send(allAlbums);
+    }
+
+    if (typeof user === "string") {
+      const userCocktails = await Cocktail.find({user});
+      return res.send(userCocktails)
+    }
+
+    const publishedAlbums = await Cocktail.find({isPublished: true});
+    return res.send(publishedAlbums);
+  } catch (e) {
+    next(e);
+  }
+});
+
+cocktailRouter.get('/:_id', auth, async (req: Auth, res, next) => {
+  try {
+    const {_id} = req.params;
+    const targetCocktail = await Cocktail.find({_id});
+    return res.send(targetCocktail);
+  } catch (e) {
+    if (e instanceof mongoose.Error.CastError) return res.status(404).send({error: 'No such album'});
+    next(e);
+  }
+});
+
+cocktailRouter.patch('/:id/publish', auth, permit(['admin']), async (req, res,next) => {
+  try {
+    const {id} = req.params;
+    let _id: ObjectId;
+    try {
+      _id = new ObjectId(id);
+    } catch {
+      return res.status(404).send({error: 'Cocktail id is not an ObjectId.'});
+    }
+
+    const targetCocktail = await Cocktail.findById(_id);
+
+    if (!targetCocktail) return res.status(400).send({error: 'There is no such cocktail.'});
+
+    targetCocktail.isPublished = true;
+    await targetCocktail.save();
+    return res.send(targetCocktail)
+  } catch (e) {
+    next(e);
+  }
+});
+
+cocktailRouter.delete('/:id', auth, permit(['admin']), async (req: Auth, res, next) => {
+  try {
+    const {id} = req.params;
+    let _id: ObjectId;
+    try {
+      _id = new ObjectId(id);
+    } catch {
+      return res.status(404).send({error: 'Cocktail id is not an ObjectId.'});
+    }
+
+    const targetCocktail = await Cocktail.findById(_id);
+    if (!targetCocktail) return res.status(400).send({error: 'There is no cocktail to delete'});
+
+    await Cocktail.deleteOne(_id);
+
+    return res.send({success: "Cocktail has been deleted."});
+  } catch (e) {
+    next(e);
+  }
+});
 
 export default cocktailRouter;
