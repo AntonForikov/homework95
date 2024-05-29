@@ -10,7 +10,7 @@ export interface CocktailFromDb {
   user: ObjectId;
   name: string;
   receipt: string;
-  image?: string | null;
+  image?: string | null | undefined;
   isPublished: boolean;
   ingredients: [{title: string, quantity: string}];
   grades: [{user: ObjectId, grade: string}]

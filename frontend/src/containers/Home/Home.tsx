@@ -1,51 +1,35 @@
 import {Alert, CircularProgress, Grid, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {selectArtistLoading, selectArtistList} from '../../store/artist/artistSlice';
 import {useEffect} from 'react';
-import {getArtists} from '../../store/artist/artistThunk';
 import CardItem from '../../components/CardItem/CardItem';
-import {selectUser} from '../../store/user/userSlice';
+import {selectCocktailList, selectCocktailLoading} from '../../store/album/cocktailSlice';
+import {getCocktails} from '../../store/album/cocktailThunk';
 
 const Home = () => {
-  const artistList = useAppSelector(selectArtistList);
+  const cocktailList = useAppSelector(selectCocktailList);
+  const loading = useAppSelector(selectCocktailLoading);
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(selectArtistLoading);
-  const user = useAppSelector(selectUser);
 
   useEffect(() => {
-    dispatch(getArtists());
+    dispatch(getCocktails());
   }, [dispatch]);
 
   return (
     <>
-      <Grid container justifyContent="center" alignItems="center" gap={3}>
-        <Grid container justifyContent="center" marginTop={3}><Typography variant="h4">Artists</Typography></Grid>
+      <Grid container justifyContent="center" alignItems="center"  gap={3}>
+        <Grid container justifyContent="center"  marginTop={3}><Typography variant="h4">Cocktails</Typography></Grid>
         {loading
           ? <CircularProgress/>
-          : !loading && artistList.length < 1
-            ? <Alert severity="warning">There is no artists in database</Alert>
-            : artistList.map((artist) => {
-              return (
-                artist.isPublished || user?._id === artist.user
-                  ? <CardItem
-                    key={artist._id}
-                    id={artist._id}
-                    title={artist.name}
-                    image={artist.image}
-                    isPublished={artist.isPublished}
-                    createdUser={artist.user}
-                    artistCard
-                  />
-                  : user?.role === 'admin'
-                  && <CardItem
-                    key={artist._id}
-                    id={artist._id}
-                    title={artist.name}
-                    image={artist.image}
-                    isPublished={artist.isPublished}
-                    createdUser={artist.user}
-                    artistCard
-                  />
+          : !loading && cocktailList.length < 1
+            ? <Alert severity="warning">There is no cocktails in database</Alert>
+            : cocktailList.map((cocktail) => {
+              return (<CardItem
+                  key={cocktail._id}
+                  id={cocktail._id}
+                  name={cocktail.name}
+                  image={cocktail.image}
+                  isPublished={cocktail.isPublished}
+                />
               );
             })
         }

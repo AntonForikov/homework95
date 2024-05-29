@@ -28,7 +28,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
     const confirmation = confirm('Are you sure?');
     if (confirmation) {
       await dispatch(logout());
-      navigate('/');
+      navigate('/login');
     } else {
       handleClose();
     }
@@ -57,10 +57,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem component={Link} to='/newArtist' onClick={handleClose}>Add Artist</MenuItem>
-        <MenuItem component={Link} to='/newAlbum' onClick={handleClose}>Add Album</MenuItem>
-        <MenuItem component={Link} to='/newTrack' onClick={handleClose}>Add Track</MenuItem>
-        <MenuItem component={Link} to='/trackHistory' onClick={handleClose}>Track History</MenuItem>
+        <MenuItem component={Link} to='/newCocktail' onClick={handleClose}>Add Cocktail</MenuItem>
         <MenuItem onClick={logoutUser}>Log Out</MenuItem>
       </Menu>
     </>

@@ -11,7 +11,7 @@ const port = 8000;
 app.use(express.json());
 app.use(cors({origin: ['http://localhost:5173']}));
 app.use(express.static('public'));
-app.use('/albums', cocktailRouter);
+app.use('/cocktails', cocktailRouter);
 app.use('/users', userRouter);
 
 const run = async () => {
