@@ -2,18 +2,18 @@ import {Alert, CircularProgress, Grid, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {useCallback, useEffect} from 'react';
 import CardItem from '../../components/CardItem/CardItem';
-import {getAlbumArtist, getAlbums} from '../../store/album/albumThunk';
-import {selectAlbumArtist, selectAlbumList, selectAlbumLoading} from '../../store/album/albumSlice';
+import {getAlbumArtist, getAlbums} from '../../store/album/cocktailThunk';
+import {selectAlbumArtist, selectCocktailList, selectCocktailLoading} from '../../store/album/cocktailSlice';
 import {useParams} from 'react-router-dom';
 import {selectUser} from '../../store/user/userSlice';
 
 
 const Albums = () => {
   const {id} = useParams();
-  const albumList = useAppSelector(selectAlbumList);
+  const albumList = useAppSelector(selectCocktailList);
   const album = useAppSelector(selectAlbumArtist);
   const user = useAppSelector(selectUser);
-  const loading = useAppSelector(selectAlbumLoading);
+  const loading = useAppSelector(selectCocktailLoading);
   const dispatch = useAppDispatch();
 
   const getArtist = useCallback(async () => {

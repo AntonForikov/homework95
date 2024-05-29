@@ -1,15 +1,15 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import axiosApi from '../../axiosApi';
-import {AlbumFromDb, AlbumMutation, ArtistFromDb} from '../../types';
+import {CocktailFromDb, CocktailMutation, ArtistFromDb} from '../../types';
 
 
 export const addAlbum = createAsyncThunk(
   'addAlbum/post',
-  async (album: AlbumMutation) => {
+  async (album: CocktailMutation) => {
 
     const formData = new FormData();
 
-    const keys = Object.keys(album) as (keyof AlbumMutation)[];
+    const keys = Object.keys(album) as (keyof CocktailMutation)[];
 
     keys.forEach(key => {
       const value = album[key];
@@ -22,7 +22,7 @@ export const getAlbums = createAsyncThunk(
   'getAlbums/get',
   async (id: string) => {
     try {
-      const {data} = await axiosApi.get<AlbumFromDb[]>(`/albums?artist=${id}`);
+      const {data} = await axiosApi.get<CocktailFromDb[]>(`/albums?artist=${id}`);
       return data;
     } catch (e) {
       return [];
@@ -34,7 +34,7 @@ export const getAlbumsForSelect = createAsyncThunk(
   'getAlbumsForSelect/get',
   async (id: string) => {
     try {
-      const {data} = await axiosApi.get<AlbumFromDb[]>(`albums?artist=${id}`);
+      const {data} = await axiosApi.get<CocktailFromDb[]>(`albums?artist=${id}`);
       return data;
     } catch (e) {
       return [];

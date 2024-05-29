@@ -15,9 +15,9 @@ import {selectArtistList} from '../../store/artist/artistSlice';
 import {getArtists} from '../../store/artist/artistThunk';
 import {TrackMutation} from '../../types';
 import {useNavigate} from 'react-router-dom';
-import {getAlbumsForSelect} from '../../store/album/albumThunk';
+import {getAlbumsForSelect} from '../../store/album/cocktailThunk';
 import SendIcon from '@mui/icons-material/Send';
-import {selectAlbumForSelect} from '../../store/album/albumSlice';
+import {selectAlbumForSelect} from '../../store/album/cocktailSlice';
 import {addTrack} from '../../store/track/truckThunk';
 
 const initial: TrackMutation = {

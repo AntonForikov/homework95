@@ -16,7 +16,7 @@ import {selectUser} from '../../store/user/userSlice';
 import Button from '@mui/material/Button';
 import axiosApi from '../../axiosApi';
 import {deleteArtist, getArtists} from '../../store/artist/artistThunk';
-import {deleteAlbum, getAlbumArtist, getAlbums} from '../../store/album/albumThunk';
+import {deleteAlbum, getAlbumArtist, getAlbums} from '../../store/album/cocktailThunk';
 
 interface Props {
   id: string,

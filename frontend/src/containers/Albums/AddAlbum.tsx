@@ -13,13 +13,13 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectArtistList} from '../../store/artist/artistSlice';
 import {getArtists} from '../../store/artist/artistThunk';
-import {AlbumMutation} from '../../types';
+import {CocktailMutation} from '../../types';
 import {useNavigate} from 'react-router-dom';
-import {addAlbum} from '../../store/album/albumThunk';
+import {addAlbum} from '../../store/album/cocktailThunk';
 import FileInput from '../../components/InputFile/FileInput';
 import SendIcon from '@mui/icons-material/Send';
 
-const initial: AlbumMutation = {
+const initial: CocktailMutation = {
   title: '',
   image: null,
   artist: '',
@@ -29,7 +29,7 @@ const initial: AlbumMutation = {
 const AddAlbum = () => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtistList);
-  const [album, setAlbum] = useState<AlbumMutation>(initial);
+  const [album, setAlbum] = useState<CocktailMutation>(initial);
   const [fileName, setFileName] = useState('');
   const resetButtonRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
