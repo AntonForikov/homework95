@@ -54,7 +54,7 @@ cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
 
 cocktailRouter.get('/onModerate', auth, async (req: Auth, res, next) => {
   try {
-    const userCocktails = await Cocktail.find({user: req.user?._id});
+    const userCocktails = await Cocktail.find({user: req.user?._id, isPublished: false});
     if (userCocktails.length > 0) {
       return res.send(true);
     } else {
