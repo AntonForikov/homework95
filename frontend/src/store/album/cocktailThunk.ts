@@ -43,22 +43,22 @@ export const getUserCocktails = createAsyncThunk(
   }
 );
 
+export const getCocktailById = createAsyncThunk(
+  'getCocktailById/get',
+  async (id: string) => {
+    try {
+      const {data} = await axiosApi.get<CocktailFromDb>(`/cocktails/${id}`);
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+);
+
 export const publishCocktail = createAsyncThunk(
   'publishCocktail/patch',
   async (id: string) => {
     await axiosApi.patch(`/cocktails/${id}/publish`);
-  }
-);
-
-export const getAlbumsForSelect = createAsyncThunk(
-  'getAlbumsForSelect/get',
-  async (id: string) => {
-    try {
-      const {data} = await axiosApi.get<CocktailFromDb[]>(`albums?artist=${id}`);
-      return data;
-    } catch (e) {
-      return [];
-    }
   }
 );
 

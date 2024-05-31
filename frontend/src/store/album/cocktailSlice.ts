@@ -1,9 +1,10 @@
 import {CocktailFromDb} from '../../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
-import {getCocktails, getUserCocktails} from './cocktailThunk';
+import {getCocktailById, getCocktails, getUserCocktails} from './cocktailThunk';
 
 interface CocktailState {
+  cocktail: CocktailFromDb | null;
   cocktailList: CocktailFromDb[];
   cocktailLoading: boolean;
 }
@@ -11,6 +12,7 @@ interface CocktailState {
 const initialState: CocktailState = {
   cocktailList: [],
   cocktailLoading: false,
+  cocktail: null
 };
 
 const cocktailSlice = createSlice({
@@ -34,9 +36,18 @@ const cocktailSlice = createSlice({
     }).addCase(getUserCocktails.rejected, (state) => {
       state.cocktailLoading = false;
     });
+    builder.addCase(getCocktailById.pending, (state) => {
+      state.cocktailLoading = true;
+    }).addCase(getCocktailById.fulfilled, (state, {payload: cocktail}) => {
+      state.cocktailLoading = false;
+      if (cocktail) state.cocktail = cocktail;
+    }).addCase(getCocktailById.rejected, (state) => {
+      state.cocktailLoading = false;
+    });
   }
 });
 
 export const cocktailReducer = cocktailSlice.reducer;
 export const selectCocktailList = (state: RootState) => state.cocktails.cocktailList;
 export const selectCocktailLoading = (state: RootState) => state.cocktails.cocktailLoading;
+export const selectCocktail = (state: RootState) => state.cocktails.cocktail;

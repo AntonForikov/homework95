@@ -1,18 +1,14 @@
 import Header from './components/Header/Header';
 import Home from './containers/Home/Home';
 import {Route, Routes} from 'react-router-dom';
-// import Albums from './containers/AddCocktail/Albums';
-// import Tracks from './containers/Tracks/Tracks';
 import Register from './containers/User/Register';
 import Login from './containers/User/Login';
 import Container from '@mui/material/Container';
-// import TrackHistory from './containers/Tracks/TrackHistory';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import {useAppSelector} from './app/hooks';
 import {selectUser} from './store/user/userSlice';
 import AddCocktail from './containers/AddCocktail/AddCocktail';
-// import AddTrack from './containers/Tracks/AddTrack';
-// import AddArtist from './containers/Artist/AddArtist';
+import Cocktail from './containers/Cocktail/Cocktail';
 function App() {
   const user = useAppSelector(selectUser);
   return (
@@ -30,7 +26,7 @@ function App() {
             }/>
             <Route path='/:id' element={
               <ProtectedRoute isAllowed={Boolean(user)}>
-                <h1>here</h1>
+                <Cocktail/>
               </ProtectedRoute>
             }/>
             <Route path='/newCocktail' element={
