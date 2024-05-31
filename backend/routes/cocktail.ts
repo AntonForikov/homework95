@@ -35,12 +35,12 @@ cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
   const {user} = req.query;
 
   try {
-    if (req.user?.role === 'admin') {
+    if (req.user?.role === 'admin' && !user) {
       const allAlbums = await Cocktail.find();
       return res.send(allAlbums);
     }
 
-    if (typeof user === "string") {
+    if (typeof user === 'string') {
       const userCocktails = await Cocktail.find({user});
       return res.send(userCocktails)
     }
@@ -55,7 +55,7 @@ cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
 cocktailRouter.get('/:_id', auth, async (req: Auth, res, next) => {
   try {
     const {_id} = req.params;
-    const targetCocktail = await Cocktail.find({_id});
+    const targetCocktail = await Cocktail.findById({_id});
     return res.send(targetCocktail);
   } catch (e) {
     if (e instanceof mongoose.Error.CastError) return res.status(404).send({error: 'No such album'});
@@ -63,7 +63,7 @@ cocktailRouter.get('/:_id', auth, async (req: Auth, res, next) => {
   }
 });
 
-cocktailRouter.patch('/:id/publish', auth, permit(['admin']), async (req, res,next) => {
+cocktailRouter.patch('/:id/publish', auth, permit(['admin']), async (req, res, next) => {
   try {
     const {id} = req.params;
     let _id: ObjectId;
@@ -85,6 +85,37 @@ cocktailRouter.patch('/:id/publish', auth, permit(['admin']), async (req, res,ne
   }
 });
 
+cocktailRouter.put('/grade/:id', auth, async (req: Auth, res, next) => {
+  try {
+    const {grade} = req.body;
+    const {id} = req.params;
+    const targetCocktail = await Cocktail.findById(id);
+    if (!targetCocktail) return res.status(404).send({error: 'There is no such cocktail in DB.'});
+
+    const gradeExist = targetCocktail.grades.find((grd) => {
+      return grd.user?.toString() === req.user?._id.toString();
+    });
+
+    if (gradeExist) {
+      targetCocktail.grades.map((gradeObj) => {
+        if (gradeObj.user?.toString() === req.user?._id.toString()) {
+          return gradeObj.grade = grade;
+        } else {
+          return gradeObj;
+        }
+      });
+    } else {
+      targetCocktail.grades.push({user: req.user?._id, grade})
+    }
+
+    await targetCocktail.save();
+
+    return res.send(targetCocktail);
+  } catch (e) {
+    next(e);
+  }
+});
+
 cocktailRouter.delete('/:id', auth, permit(['admin']), async (req: Auth, res, next) => {
   try {
     const {id} = req.params;
@@ -100,7 +131,7 @@ cocktailRouter.delete('/:id', auth, permit(['admin']), async (req: Auth, res, ne
 
     await Cocktail.deleteOne(_id);
 
-    return res.send({success: "Cocktail has been deleted."});
+    return res.send({success: 'Cocktail has been deleted.'});
   } catch (e) {
     next(e);
   }

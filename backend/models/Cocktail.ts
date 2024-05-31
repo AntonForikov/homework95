@@ -36,9 +36,12 @@ const CocktailSchema = new Schema({
   grades: {
     type: [{
       user: Schema.Types.ObjectId,
-      grade: Number
-    }] || null,
-    default: null
+      grade: {
+        type: Number,
+        enum: [1, 2, 3, 4, 5],
+      }}] || null,
+    default: null,
+    _id: false
   },
 
 }, {versionKey: false});
