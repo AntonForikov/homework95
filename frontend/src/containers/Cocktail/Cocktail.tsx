@@ -2,14 +2,13 @@ import {useParams} from 'react-router-dom';
 import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {selectCocktail} from '../../store/album/cocktailSlice';
-import {getCocktailById} from '../../store/album/cocktailThunk';
+import {getCocktailById, gradeCocktail} from '../../store/album/cocktailThunk';
 import Grid from '@mui/material/Grid';
 import no_image_available from '../../../assets/no_image_available.png';
 import {apiUrl} from '../../constants';
 import Typography from '@mui/material/Typography';
 import StarIcon from '@mui/icons-material/Star';
 import {IconButton} from '@mui/material';
-import axiosApi from '../../axiosApi';
 import {selectUser} from '../../store/user/userSlice';
 
 const Cocktail = () => {
@@ -27,9 +26,11 @@ const Cocktail = () => {
 
   const rating = [1, 2, 3, 4, 5];
 
-  const gradeCocktail = async (grade: number) => {
-    await axiosApi.put(`cocktails/grade/${id}`, {grade});
-    if (id) dispatch(getCocktailById(id));
+  const gradeItem = async (grade: number) => {
+    if (id) {
+      await dispatch(gradeCocktail({id: id, grade: grade}));
+      dispatch(getCocktailById(id));
+    }
   };
 
   const ratingCounter = () => {
@@ -69,7 +70,7 @@ const Cocktail = () => {
     <Typography variant='h6' fontWeight={525}>My Grade: {myGrade()}</Typography>
     <Grid container>
       <Typography variant="h6">Rate: {rating.map(grade => {
-        return <IconButton onClick={() => gradeCocktail(grade)}>
+        return <IconButton onClick={() => gradeItem(grade)}>
           <StarIcon fontSize="small" sx={{color: '#ffc400'}}></StarIcon>
         </IconButton>;
       })}

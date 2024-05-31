@@ -21,6 +21,11 @@ export interface CocktailFromDb {
   grades: [{user: ObjectId, grade: string}]
 }
 
+export interface Grade {
+  id: string,
+  grade: number
+}
+
 export interface UserFromDb {
   _id: string;
   email: string;
