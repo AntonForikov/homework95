@@ -81,12 +81,19 @@ const AddAlbum = () => {
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (cocktail.name[0] === ' ' || cocktail.receipt[0] === ' ') return alert('Cocktail name and receipt can not begin from whitespace.');
-    const cocktailData = {
-      ...cocktail,
-      ingredients
-    };
+    let emptyIngredients = false;
+
+    ingredients.forEach(ingredient => {
+      if (ingredient.title[0] === ' ') emptyIngredients = true;
+    });
+
+    if (emptyIngredients) return alert('Please fill all ingredients they can not begin from whitespace.');
 
     try {
+      const cocktailData = {
+        ...cocktail,
+        ingredients
+      };
       setDisabler(true);
       await dispatch(addCocktail(cocktailData));
       setDisabler(false);
@@ -120,6 +127,7 @@ const AddAlbum = () => {
           <Grid item xs>
             <TextField
               fullWidth
+              multiline
               variant="outlined"
               label="Receipt"
               name="receipt"
@@ -143,7 +151,7 @@ const AddAlbum = () => {
               <TextField
                 sx={{width: '20%'}}
                 type="number"
-                inputProps={{min: 1}}
+                inputProps={{min: 0.1, step: 0.1}}
                 variant="outlined"
                 label="Quantity"
                 name="quantity"
