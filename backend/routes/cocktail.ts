@@ -32,18 +32,9 @@ cocktailRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, r
 });
 
 cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
-  const {user, onModerate} = req.query;
+  const {user} = req.query;
 
   try {
-    if (onModerate) {
-      const userCocktails = await Cocktail.find({user: req.user?._id, isPublished: false});
-      if (userCocktails.length > 0) {
-        return res.send(true);
-      } else {
-        return res.send(false);
-      }
-    }
-
     if (req.user?.role === 'admin' && !user) {
       const allAlbums = await Cocktail.find();
       return res.send(allAlbums);
