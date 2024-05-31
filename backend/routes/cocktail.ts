@@ -32,9 +32,18 @@ cocktailRouter.post('/', auth, imagesUpload.single('image'), async (req: Auth, r
 });
 
 cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
-  const {user} = req.query;
+  const {user, onModerate} = req.query;
 
   try {
+    if (onModerate) {
+      const userCocktails = await Cocktail.find({user: req.user?._id, isPublished: false});
+      if (userCocktails.length > 0) {
+        return res.send(true);
+      } else {
+        return res.send(false);
+      }
+    }
+
     if (req.user?.role === 'admin' && !user) {
       const allAlbums = await Cocktail.find();
       return res.send(allAlbums);
@@ -51,19 +60,6 @@ cocktailRouter.get('/', auth, async (req: Auth, res, next) => {
     next(e);
   }
 });
-
-cocktailRouter.get('/onModerate', auth, async (req: Auth, res, next) => {
-  try {
-    const userCocktails = await Cocktail.find({user: req.user?._id, isPublished: false});
-    if (userCocktails.length > 0) {
-      return res.send(true);
-    } else {
-      return res.send(false);
-    }
-  } catch (e) {
-    next(e);
-  }
-})
 
 cocktailRouter.get('/:_id', auth, async (req: Auth, res, next) => {
   try {
