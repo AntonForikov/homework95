@@ -1,20 +1,18 @@
 import {CocktailFromDb} from '../../types';
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
-import {getCocktailById, getCocktails, getOnModerate, getUserCocktails} from './cocktailThunk';
+import {getCocktailById, getCocktails, getUserCocktails} from './cocktailThunk';
 
 interface CocktailState {
   cocktail: CocktailFromDb | null;
   cocktailList: CocktailFromDb[];
   cocktailLoading: boolean;
-  onModerate: boolean
 }
 
 const initialState: CocktailState = {
   cocktailList: [],
   cocktailLoading: false,
   cocktail: null,
-  onModerate: false
 };
 
 const cocktailSlice = createSlice({
@@ -46,9 +44,6 @@ const cocktailSlice = createSlice({
     }).addCase(getCocktailById.rejected, (state) => {
       state.cocktailLoading = false;
     });
-    builder.addCase(getOnModerate.fulfilled, (state, {payload: onModerate}) => {
-      state.onModerate = onModerate;
-    });
   }
 });
 
@@ -56,4 +51,3 @@ export const cocktailReducer = cocktailSlice.reducer;
 export const selectCocktailList = (state: RootState) => state.cocktails.cocktailList;
 export const selectCocktailLoading = (state: RootState) => state.cocktails.cocktailLoading;
 export const selectCocktail = (state: RootState) => state.cocktails.cocktail;
-export const selectOnModerate = (state: RootState) => state.cocktails.onModerate;

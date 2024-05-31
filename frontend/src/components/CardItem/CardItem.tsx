@@ -5,6 +5,7 @@ import {
   styled, Typography,
 } from '@mui/material';
 import UnpublishedIcon from '@mui/icons-material/Unpublished';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import no_image_available from '../../../assets/no_image_available.png';
 import React from 'react';
 import {apiUrl} from '../../constants';
@@ -63,9 +64,14 @@ const CardItem: React.FC<Props> = ({
       <Card>
         <Grid container justifyContent='space-between' alignItems='center' p={1}>
           <Typography variant='h6'>{name}</Typography>
-          {!isPublished &&
+          {!isPublished && user?.role === 'admin' &&
             <Box display='flex'>
               <><Typography color="red" marginRight={1}>Unpublished</Typography><UnpublishedIcon color="error"/></>
+            </Box>
+          }
+          {!isPublished && user?.role === 'user' &&
+            <Box display='flex'>
+              <><Typography color="warning.main" marginRight={1}>On review</Typography><VisibilityIcon color="warning"/></>
             </Box>
           }
         </Grid>
