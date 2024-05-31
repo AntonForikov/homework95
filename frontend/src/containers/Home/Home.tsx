@@ -2,8 +2,8 @@ import {Alert, CircularProgress, Grid, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import React, {useEffect} from 'react';
 import CardItem from '../../components/CardItem/CardItem';
-import {selectCocktailList, selectCocktailLoading} from '../../store/album/cocktailSlice';
-import {getCocktails, getUserCocktails} from '../../store/album/cocktailThunk';
+import {selectCocktailList, selectCocktailLoading, selectOnModerate} from '../../store/album/cocktailSlice';
+import {getCocktails, getOnModerate, getUserCocktails} from '../../store/album/cocktailThunk';
 import {selectUser} from '../../store/user/userSlice';
 
 interface Props{
@@ -13,12 +13,14 @@ const Home: React.FC<Props> = ({userCocktails= false}) => {
   const cocktailList = useAppSelector(selectCocktailList);
   const loading = useAppSelector(selectCocktailLoading);
   const user = useAppSelector(selectUser);
+  const onModerate = useAppSelector(selectOnModerate);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (userCocktails && user) {
       dispatch(getUserCocktails(user?._id));
     } else {
+      dispatch(getOnModerate());
       dispatch(getCocktails());
     }
   }, [dispatch, userCocktails, user]);
@@ -27,6 +29,9 @@ const Home: React.FC<Props> = ({userCocktails= false}) => {
     <>
       <Grid container justifyContent="center" alignItems="center"  gap={3}>
         <Grid container justifyContent="center"  marginTop={3}><Typography variant="h4">Cocktails</Typography></Grid>
+        {!userCocktails && onModerate && user?.role !== 'admin' &&
+          <Grid container justifyContent='center'><Alert severity="warning">Your cocktail is being reviewed by a moderator</Alert></Grid>
+        }
         {loading
           ? <CircularProgress/>
           : !loading && cocktailList.length < 1

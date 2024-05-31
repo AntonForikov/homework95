@@ -55,6 +55,18 @@ export const getCocktailById = createAsyncThunk(
   }
 );
 
+export const getOnModerate = createAsyncThunk(
+  'getOnModerate/get',
+  async () => {
+    try {
+      const {data} = await axiosApi.get('/cocktails/onModerate');
+      return data;
+    } catch (e) {
+      console.error(e);
+    }
+  }
+);
+
 export const publishCocktail = createAsyncThunk(
   'publishCocktail/patch',
   async (id: string) => {
