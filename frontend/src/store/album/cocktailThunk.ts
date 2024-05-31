@@ -59,7 +59,7 @@ export const getOnModerate = createAsyncThunk(
   'getOnModerate/get',
   async () => {
     try {
-      const {data} = await axiosApi.get('/cocktails/onModerate');
+      const {data} = await axiosApi.get('/cocktails?onModerate=true');
       return data;
     } catch (e) {
       console.error(e);

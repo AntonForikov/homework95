@@ -1,6 +1,6 @@
 import {Alert, CircularProgress, Grid, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import CardItem from '../../components/CardItem/CardItem';
 import {selectCocktailList, selectCocktailLoading, selectOnModerate} from '../../store/album/cocktailSlice';
 import {getCocktails, getOnModerate, getUserCocktails} from '../../store/album/cocktailThunk';
@@ -16,14 +16,18 @@ const Home: React.FC<Props> = ({userCocktails= false}) => {
   const onModerate = useAppSelector(selectOnModerate);
   const dispatch = useAppDispatch();
 
+  const getCocktailsInfo = useCallback(async () => {
+    await dispatch(getOnModerate());
+    dispatch(getCocktails());
+  }, [dispatch]);
+
   useEffect(() => {
     if (userCocktails && user) {
       dispatch(getUserCocktails(user?._id));
     } else {
-      dispatch(getOnModerate());
-      dispatch(getCocktails());
+      void getCocktailsInfo();
     }
-  }, [dispatch, userCocktails, user]);
+  }, [dispatch, userCocktails, user, getCocktailsInfo]);
 
   return (
     <>
