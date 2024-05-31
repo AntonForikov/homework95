@@ -33,7 +33,7 @@ const Home: React.FC<Props> = ({userCocktails= false}) => {
     <>
       <Grid container justifyContent="center" alignItems="center"  gap={3}>
         <Grid container justifyContent="center"  marginTop={3}><Typography variant="h4">Cocktails</Typography></Grid>
-        {!userCocktails && onModerate && user?.role !== 'admin' &&
+        {userCocktails && onModerate && user?.role !== 'admin' &&
           <Grid container justifyContent='center'><Alert severity="warning">Your cocktail is being reviewed by a moderator</Alert></Grid>
         }
         {loading
